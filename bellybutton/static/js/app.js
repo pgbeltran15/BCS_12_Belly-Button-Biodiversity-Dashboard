@@ -31,7 +31,7 @@ function buildMetadata(sample) {
     // Loop through the key, value pairs to create a meta data list
     Object.entries(metadataResult[0]).forEach(([key, value]) => {
       var listItem = list.append("li");
-      listItem.html("<b>" + titleCase(key) + ": " +"</b>" + value);
+      listItem.html("<strong>" + titleCase(key) + ": " +"</strong>" + value);
     });
   });
 };
