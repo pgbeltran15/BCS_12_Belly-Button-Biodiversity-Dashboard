@@ -7,29 +7,27 @@ function titleCase(str) {
 
 function buildMetadata(sample) {
   //Function to build the Demographic info on the web page for the passed 'sample' data
-  console.log("debug: Inside buildMetadata() - sample");
   //console.log(sample);
 
   // Query the json data to get the metadata corespoding to the 'sample' data passed
   d3.json("samples.json").then((sampleMetadata) => {
     var metadataResult = sampleMetadata.metadata.filter(sampleObj => sampleObj.id == sample);
 
-        // Grab the reference for the panel html that will hold the data
-        var panel = d3.select("#sample-metadata");
-        // Clear any old data
-        panel.html("");
+    // Grab the reference for the panel html that will hold the data
+    var panel = d3.select("#sample-metadata");
+    // Clear any old data
+    panel.html("");
 
-        // Add the ul tag to the panel html document
-        var list = panel.append("ul");
-        // Add a class 'list-unstyled' to the list
-        list.classed("list-unstyled", true);
+    // Add the ul tag to the panel html document
+    var list = panel.append("ul");
+    // Add a class 'list-unstyled' to the list
+    list.classed("list-unstyled", true);
 
-        // Loop through the key, value pairs to create a meta data list
-        Object.entries(metadataResult[0]).forEach(([key, value]) => {
-          var listItem = list.append("li");
-          listItem.text(titleCase(key) + ": " + value);
-        });
-
+    // Loop through the key, value pairs to create a meta data list
+    Object.entries(metadataResult[0]).forEach(([key, value]) => {
+      var listItem = list.append("li");
+      listItem.text(titleCase(key) + ": " + value);
+    });
   });
 };
 
@@ -149,4 +147,5 @@ function optionChanged(newSample) {
   buildCharts(newSample);
 };
 
+// Call the init() function to intialize the dashbaord
 init();
