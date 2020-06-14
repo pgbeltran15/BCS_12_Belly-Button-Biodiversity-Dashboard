@@ -23,11 +23,6 @@ function buildMetadata(sample) {
     // Add a class 'list-unstyled' to the list
     list.classed("list-unstyled", true);
 
-    console.log(metadataResult[0]);
-    console.log(Object.keys(metadataResult[0]));
-    console.log(Object.values(metadataResult[0]));
-    console.log(Object.entries(metadataResult[0]));
-
     // Loop through the key, value pairs to create a meta data list
     Object.entries(metadataResult[0]).forEach(([key, value]) => {
       var listItem = list.append("li");
