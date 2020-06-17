@@ -4,9 +4,12 @@ Belly Button Biodiversity Dashboard Assignment
 
 (https://sanjive.github.io/BCS_12_Belly-Button-Biodiversity-Dashboard/bellybutton/)
 
+**A dynamic dashboard where a user interacts to selected the Test Subject and view relevant data for each subject dynamically.**
+
 - Created a Belly Button Biodiversity Dashbord
 - Displays a list to select a subject
-- The Dashboard displays the selected subjects Demographics and the data as Horizontal bar and bubble charts
+- The Dashboard displays the selected subjects Demographics and the data as Horizontal bar and bubble charts.
+- The Dashborad also displays Top Ten OTU data fo rthe selected subject.
 - A Gauge that displays the Belly button washing frequency.
   * The Max Washing frequency for the dataset is 9 and
   * The median is 2.
