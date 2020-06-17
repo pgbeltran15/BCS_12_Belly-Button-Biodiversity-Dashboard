@@ -8,7 +8,10 @@ Belly Button Biodiversity Dashboard Assignment
 - Displays a list to select a subject
 - The Dashboard displays the selected subjects Demographics and the data as Horizontal bar and bubble charts
 - A Gauge that displays the Belly button washing frequency.
---  The Max Washing frequency for the dataset is 9 and the median is 2.
---  The dashboard displays the values on the gauge and as text and also displays the offset of this value from the median value of 2. On teh vizualization a green triangle with a value displays the possitive offset and the Red triangle displays the negative offset.
+  * The Max Washing frequency for the dataset is 9 and
+  * The median is 2.
+  * The dashboard displays the values on the gauge and as text.
+    * The offset of this value from the datset median value is displayed with a **Green** triangle (+) and a **Red** traingle (-) values.
+    <br>**Note:** A value of zero offset is displayed with a dash (-).
 
 ![Belly Button Biodiversity Dashboard](images/bellybutton-image01.png)
