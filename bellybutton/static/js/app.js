@@ -39,7 +39,8 @@ function buildMetadata(sample) {
       title: {
         text: "<b>Belly Button Washing Frequency</b><br><span style='font-size:0.8em';>Subject ID #" +
           metadataResult[0].id +
-          " - Scrubs per week</span><br><span style='font-size:0.6em';>Median: 2 & Max: 9</span>",
+          " - Scrubs per week</span><br><span style='font-size:0.6em';>" +
+          "(The value next to triangle is the offset from the median value)<br>Median: 2 & Max: 9</span>",
         font: { size: 18, color: "darkblue" }
       },
       domain: {
@@ -83,7 +84,11 @@ function buildMetadata(sample) {
       font: { color: "darkblue" }
     };
 
+    var hvr = d3.select("#gauge");
+    console.log(hvr);
+
     // Create the gauge plot
+
     Plotly.newPlot('gauge', gauge_trace, gauge_layout);
 
   });
@@ -97,17 +102,27 @@ function buildCharts(sample) {
     var sampleResponse = samplesData.samples.filter(sampleObj => sampleObj.id == sample);
     response = sampleResponse[0];
 
+
     // Create an array to store objects containing the data for each sample
     // Will be used to hold the sorted and sliced data
-    plotData = [];
-    // Loop through the three data arrays to create dictionaries and add them to the 'data' array
-    for (i = 0; i < response.otu_ids.length; i++) {
-      plotData.push({
-        id: `OTU ${response.otu_ids[i]}`,
-        value: response.sample_values[i],
-        label: response.otu_labels[i]
-      });
-    }
+    let plotData = Array.from({ length: response.otu_ids.length }, (i, j) => ({
+      id: `OTU ${response.otu_ids[j]}`,
+      value: response.sample_values[j],
+      label: response.otu_labels[j]
+    }));
+
+    /*  // alternate method to create the array - Uses a traditional for loop method
+        plotData = [];
+        // Loop through the three data arrays to create dictionaries and add them to the 'data' array
+        for (i = 0; i < response.otu_ids.length; i++) {
+          plotData.push({
+            id: `OTU ${response.otu_ids[i]}`,
+            value: response.sample_values[i],
+            label: response.otu_labels[i]
+          });
+        }
+        console.log(plotData);
+    */
 
     // Sort the 'plotData' array
     var sortedData = plotData.sort((a, b) => b.value - a.value);
@@ -141,12 +156,8 @@ function buildCharts(sample) {
     bar_layout = {
       title: `<b>Top Ten OTU Data</b><br><span style='font-size:0.8em';>Subject ID #${response.id}</span>`,
       font: { color: "darkblue" },
-      yaxis: {
-        autorange: true,
-      },
-      xaxis: {
-        autorange: true,
-      },
+      yaxis: { autorange: true, },
+      xaxis: { autorange: true, },
     };
 
     // Create the horizontal Bar plot
@@ -187,28 +198,31 @@ function buildCharts(sample) {
 
 function init() {
   // Initialize Page
-  // Grab a reference to the dropdown select element
-  var selector = d3.select("#selDataset");
 
   // Read the samples.json data and extract all the Data Sample names
-  // The Data sample name array are located at json_data.names[]
-  d3.json("samples.json").then((sampleNames) => {
-    sampleNames.names.forEach((sampleName) => {
-      selector
-        .append("option")
-        .text(sampleName)
-        .property("value", sampleName);
-    });
+  d3.json("samples.json").then(function (data) {
+    // console.log(data);
+    var sampleNames = data.names;
+
+    d3.selectAll("#selDataset")
+      .selectAll("option")
+      .data(sampleNames)
+      .enter()
+      .append("option")
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return d; });
 
     // Use the first set of the sample data to build the initial plots and Metadata display
-    const firstSampleName = sampleNames.names[0];
+    const firstSampleName = sampleNames[0];
 
-    // Build the Demographic Metadata and the Gauge display
+    // Build the Demographic Metadata and the Gauge display for the first value
     buildMetadata(firstSampleName);
 
     // Build the Charts (Bar and Bubble)
     buildCharts(firstSampleName);
 
+  }).catch(function (error) {
+    console.log(error);
   });
 }
 
@@ -220,13 +234,19 @@ function optionChanged(newSample) {
 
 // Calculate the max and median for the Belly Button Washing frequency
 // These values will be used for the Gauge
-const wfreq_max = d3.json("samples.json").then((data) => {
+// Note: At this time I am unable to use these global variables interactively.
+window.wfreq_max = d3.json("samples.json").then((data) => {
   //console.log(wfreq_max);
   return d3.max(data.metadata.map((d) => { return d.wfreq; }));
+}).catch(function (error) {
+  console.log(error);
 });
-const wfreq_median = d3.json("samples.json").then((data) => {
+
+window.wfreq_median = d3.json("samples.json").then((data) => {
   //console.log(wfreq_median);
   return d3.median(data.metadata.map((d) => { return d.wfreq; }));
+}).catch(function (error) {
+  console.log(error);
 });
 
 // Call the init() function to intialize the dashboard
